@@ -1,0 +1,5 @@
+the ints are: 1, 2, 3
+The two strings just read are: hello, goodbye
+The two strings just read are: yes, no
+The two strings just read are: true, false
+The two strings just read are: happy, happier
