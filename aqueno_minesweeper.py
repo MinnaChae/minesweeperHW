@@ -1,8 +1,9 @@
-
 """ Name: Aqueno Nirasmi Amalraj
     Assignment: Minesweeper """
+import os
 
 input_file = open('mines.txt', 'r')
+output_file = open('minesweeper_output.txt', 'w')
 lines = input_file.readlines()
 field_string = "Field #"
 field_num = 1
@@ -33,12 +34,14 @@ def find_adjacent_mines(row, col):
 
 def display_output():
     """ This function helps to print the output in matrix using nested for loops """
+    s = ""
     for a in range(0, rows):
         for b in range(0, cols):
-            print(find_adjacent_mines(a, b), end="")
+            s = s + str(find_adjacent_mines(a, b)) + ""
 
-        print()
-    print()
+        s += "\n"
+
+    return s + "\n"
 
 
 while line_num < num_of_lines:
@@ -65,14 +68,21 @@ while line_num < num_of_lines:
             line_num += 1
 
         if row_col:  # condition for printing Field number
-            print(field_string + str(field_num) + ":")
+            output_file.write(field_string + str(field_num) + ":" + "\n")
+            # print(field_string + str(field_num) + ":")
 
             field_num += 1
         # Create 2D matrix to convert string 1's and 0's to integer 1 and 0
         int_matrix = [[int(ele) for ele in sub] for sub in string_int_matrix]
-
-        display_output()  # call display_output function to display every line of the output
+        # display_output()
+        output_file.write((display_output()))
     else:
         break
 
 input_file.close()  # close input_file
+output_file.close()  # close output_file
+
+# to remove the additional line on the output_file
+with open('minesweeper_output.txt', 'rb+') as filehandle:
+    filehandle.seek(-2, os.SEEK_END)
+    filehandle.truncate()
