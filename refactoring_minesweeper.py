@@ -4,96 +4,100 @@ TCSS 504 Team Solution to Minesweeper Problem
 """
 
 
-class FileHandler:
+class Minesweeper:
     """
-    Handles file reading and writing for the Minesweeper problem.
+    Creates an output file of one or more minesweeper fields. Shows how many cells with mines are adjacent to safe
+    rooms.
+
     """
     def __init__(self, input_file, output_file):
+        """
+        Initialize an instance of Minesweeper.
+        :param input_file: the input file to be read and processed.
+        :param output_file: the output file to be written to.
+        """
         self.input_file = input_file
         self.output_file = output_file
+        self.run_minesweeper_solution()  # Automatically call run_minesweeper_solution() upon instantiation
 
-    def read_input_file(self):
+    def run_minesweeper_solution(self):
+        """
+        Contains the main logic to solve the Minesweeper solution.
+        """
+        # Open the file with a context manager
         with open(self.input_file, "r") as file:
+            # Initialize master array
+            fields = []
+
+            # Loop through the file
             while True:
-                # Grab the numbers from the first line (remove whitespace/newline at the end if any)
-                first_line = file.readline().rstrip()
+                # Create instances of num_of_rows and field by calling read_field()
+                num_of_rows, field = self.read_field(file)
 
-                # Split the string to separate the numbers into a list
-                rows_cols_nums = first_line.split()
-
-                # Turn the first number into an integer for number of subsequent lines to process
-                num_of_rows = int(rows_cols_nums[0])
-
-                # If there are no lines to read, then don't process (handles 0 0 at end of file)
+                # If number of rows (lines to read) is zero, then break out of the loop
                 if num_of_rows == 0:
                     break
 
-                # Initialize the current field as a list of strings using list comprehension
-                # Using _ to show that the int returned by range(num_of_rows) isn't going to be in the list comp
-                field = [file.readline().rstrip() for _ in range(num_of_rows)]
+                # Create a processed field by calling process_the_field
+                processed_field = self.process_the_field(field)
+                # Append the processed field to the fields array
+                fields.append(processed_field)
 
-            return field
+            # Write to the output file
+            self.write_to_output(fields)
 
-    def write_output_file(self, field):
-        with open(self.output_file, "w") as output_file:
-            for i in range(len(field)):
-                output_file.write(f"Field #{i + 1}:\n")
-                output_file.write("\n".join(field[i]) + "\n")
+    def read_field(self, file):
+        """
+        Creates an unprocessed field using row numbers.
+        :param file: the input file
+        :return: num_of_rows (int), field (array)
+        """
+        # Grab the first line of the file and strip any trailing characters
+        first_line = file.readline().rstrip()
+        # Split into an array of strings (two string numbers)
+        rows_cols_nums = first_line.split()
+        # Extract the first string number (representing the rows) and turn it into an integer
+        num_of_rows = int(rows_cols_nums[0])
 
-                if i != len(field) - 1:
-                    output_file.write("\n")
+        # Create the unprocessed current field using num_of_rows to know how many lines to read
+        field = [file.readline().rstrip() for _ in range(num_of_rows)]
 
+        # Return row number and the field
+        return num_of_rows, field
 
-class MinesweeperSolver:
-    """
-    Processes the field to be written to the output file.
-    """
-    def __init__(self, field_count, field):
-        self.field_count = field_count
-        self.field = field
-        self.process_fields(field)
-
-    def process_fields(self, field):
+    def process_the_field(self, field):
         """
         Processes the entire field and replaces each "safe" cell with the number of mines adjacent to it.
-        :param field: a list of strings representing the field being processed
-        :return: a processed list that contains the number of mines adjacent to safe cells
+        :param field: the unprocessed field (array)
+        :return: processed field (array)
         """
-
-        # Initialize a list variable for the field after it's processed
+        # Initialize an array for the final processed field
         processed_field = []
 
-        # Loop over each cell (row, col) in the field
+        # Loop over the unprocessed field (rows and columns)
         for row in range(len(field)):
-            # Initialize string variable, where "*" or the adjacent mine count will go
+            # Initialize a string variable to which to append numbers and mines
             processed_row = ""
             for col in range(len(field[row])):
-                # Set current cell in the field
+                # Grab the current cell of the unprocessed field
                 cell = field[row][col]
-                # Check if the cell contains a mine
-                if cell == "*":
-                    # If yes, add it to the processed_row variable
-                    processed_row += "*"
-                else:
-                    # If there's no mine, call count_the_mines to see how many adjacent mines there may be
-                    mine_count = self.count_adjacent_mines(field, row, col)
-                    # Add the number to processed_row after converting to a string
-                    processed_row += str(mine_count)
-            # Append the processed row string to the processed field list
+                # Check if it has a mine or if it is a safe cell
+                # If it's safe, call count_adjacent_mines
+                processed_row += "*" if cell == "*" else str(self.count_adjacent_mines(field, row, col))
+            # Append the processed row string variable to the processed field array when done
             processed_field.append(processed_row)
 
-        # Return the finished processed list
+        # Return the processed field when all rows and columns have been processed and appended
         return processed_field
 
     def count_adjacent_mines(self, field, row, col):
         """
-        Helper method for process_the_field. Counts the number of mines adjacent to a particular cell.
-        :param field: the list representing the field being processed
-        :param row: row coordinate of a cell in the field
-        :param col: column coordinate of a cell in the field
-        :return: (int) the number of mines adjacent to a given cell
+        Counts how many mines are adjacent to safe cells.
+        :param field: the current field (array)
+        :param row: the row coordinate (int)
+        :param col: the column coordinate (int)
+        :return: the number of mines (int)
         """
-
         # Initialize a mine counter
         mine_count = 0
 
@@ -106,33 +110,29 @@ class MinesweeperSolver:
                     # Increment mine_count
                     mine_count += 1
 
-        # Return to process_the_field
+        # Return the mine count
         return mine_count
 
+    def write_to_output(self, fields):
+        """
+        Writes to the output file.
+        :param fields: the final master array.
+        :return: None
+        """
+        # Write to the official output file with required formatting
+        with open(self.output_file, "w") as output_file:
+            field_count = 1
+            # Iterate over fields
+            for field in fields:
+                # Before each field, write "Field #x" followed by newline
+                output_file.write(f"Field #{field_count}:\n")
+                # Join rows in field on a newline and add a newline at the end
+                output_file.write("\n".join(field) + "\n")
 
-class Minesweeper:
-    """
-    Contains primary logic for Minesweeper problem.
-    """
-    def __init__(self, input_file, output_file):
-        self.input_file = input_file
-        self.output_file = output_file
-        self.file_handler = FileHandler(input_file, output_file)
-        self.field_count = 1
-        self.solve_minesweeper_problem()
+                # Add a newline between fields unless it's the last field
+                if field_count != len(fields):
+                    output_file.write("\n")
+                field_count += 1
 
-    def solve_minesweeper_problem(self):
-        while True:
-            data = self.file_handler.read_input_file()
-
-            if not data:
-                break
-
-            processed_field = MinesweeperSolver(self.field_count, data)
-
-            self.file_handler.write_output_file(processed_field)
-
-            self.field_count += 1
-
-
-minesweeper_instance = Minesweeper(input_file="mines.txt", output_file="minesweeper_output.txt")
+# Usage, make sure your input/output files are in the same directory!
+minesweeper_instance = Minesweeper('mines.txt', 'minesweeper_output.txt')
