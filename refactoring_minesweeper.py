@@ -18,7 +18,6 @@ class Minesweeper:
         """
         self.input_file = input_file
         self.output_file = output_file
-        self.run_minesweeper_solution()  # Automatically call run_minesweeper_solution() upon instantiation
 
     def run_minesweeper_solution(self):
         """
@@ -134,5 +133,7 @@ class Minesweeper:
                     output_file.write("\n")
                 field_count += 1
 
-# Usage, make sure your input/output files are in the same directory!
+
+# Usage
 minesweeper_instance = Minesweeper('mines.txt', 'minesweeper_output.txt')
+minesweeper_instance.run_minesweeper_solution()
