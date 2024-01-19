@@ -55,6 +55,9 @@ class Minesweeper:
         first_line = file.readline().rstrip()
         # Split into an array of strings (two string numbers)
         rows_cols_nums = first_line.split()
+        if not rows_cols_nums:
+            # If there are no elements, return 0 for num_of_rows and an empty field
+            return 0, []
         # Extract the first string number (representing the rows) and turn it into an integer
         num_of_rows = int(rows_cols_nums[0])
 
