@@ -103,6 +103,26 @@ class MinesweeperTests(unittest.TestCase):
 
         # Assert that the method is counting mines correctly
         self.assertEqual(expected_mine_count, test_mine_count, "The method did not correctly count adjacent mines")
+ 
+def test_read_col_row_data_single_minefield(self):
+        """
+        Testing the input read for Minefield row, col, and data
+        """
+        with open('minefield.txt', 'r') as file:
+            first_line = file.readline().rstrip()
+            expected_row, expected_col = first_line.split()
+            expected_row = int(expected_row)
+            expected_col = int(expected_col)
+            expected_data = [file.readline().rstrip() for _ in range(expected_row)]
+
+        ms = Minesweeper('minefield.txt', 'minesweeper_output.txt')
+
+        with open('minefield.txt', 'r') as file:
+            row_count, data = ms.read_field(file)
+        col_count = len(data)
+        self.assertEqual(expected_row, row_count, "Testing for input of rows")
+        self.assertEqual(expected_col, col_count, "Testing for input of col")
+        self.assertEqual(expected_data, data, "Testing for input of data")
 
     def test_write_to_output(self):
         """
