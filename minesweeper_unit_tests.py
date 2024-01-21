@@ -112,7 +112,7 @@ class MinesweeperTests(unittest.TestCase):
         """
         Testing the input read for Minefield row, col, and data
         """
-        with open('test_row_col_data.txt', 'r') as file:
+         with open('test_row_col_data.txt', 'r') as file:
             first_line = file.readline().rstrip()
             expected_row, expected_col = first_line.split()
             expected_row = int(expected_row)
