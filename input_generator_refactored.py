@@ -23,12 +23,14 @@ def get_integer_input(prompt):
         except ValueError:
             print("Invalid input. Please enter a valid integer.")
 
-def write_to_file(rows, columns, minefield, filename):
+def write_to_file(rows, columns, minefield, filename, is_last_minefield):
     with open(filename, 'a') as file:
         file.write(f"{rows} {columns}\n")
         for row in minefield:
             file.write(''.join(row) + '\n')
-        file.write("0 0\n\n")
+
+        if is_last_minefield:
+            file.write("0 0\n")
 
 def main():
     filename = 'minefield.txt'
@@ -40,9 +42,9 @@ def main():
 
         minefield = create_minefield(rows, columns, mine_percentage)
 
-        write_to_file(rows, columns, minefield, filename)
-
         another_minefield = input("Do you want to enter data for another minefield? (yes/no): ").lower()
+        write_to_file(rows, columns, minefield, filename, another_minefield != 'yes')
+
         if another_minefield != 'yes':
             break
 
