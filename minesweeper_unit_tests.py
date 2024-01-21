@@ -112,16 +112,16 @@ class MinesweeperTests(unittest.TestCase):
         """
         Testing the input read for Minefield row, col, and data
         """
-        with open('minefield.txt', 'r') as file:
+        with open('test_row_col_data.txt', 'r') as file:
             first_line = file.readline().rstrip()
             expected_row, expected_col = first_line.split()
             expected_row = int(expected_row)
             expected_col = int(expected_col)
             expected_data = [file.readline().rstrip() for _ in range(expected_row)]
 
-        ms = Minesweeper('minefield.txt', 'minesweeper_output.txt')
+        ms = Minesweeper('test_row_col_data.txt', 'output_test_row_col_data.txt')
 
-        with open('minefield.txt', 'r') as file:
+        with open('test_row_col_data.txt', 'r') as file:
             row_count, data = ms.read_field(file)
         col_count = len(data)
         self.assertEqual(expected_row, row_count, "Testing for input of rows")
