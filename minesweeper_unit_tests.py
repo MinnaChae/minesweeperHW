@@ -28,6 +28,10 @@ class MinesweeperTests(unittest.TestCase):
         self.assertEqual(minesweeper_instance.input_file, input_file)
         self.assertEqual(minesweeper_instance.output_file, output_file)
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4c225dd78a4bd467814f76047c315bca9172f03b
     def test_run_minesweeper_solution(self):
         """
         Tests the general functionality of the run_minesweeper_solution method.
@@ -102,6 +106,7 @@ class MinesweeperTests(unittest.TestCase):
 
         # Assert that the method is counting mines correctly
         self.assertEqual(expected_mine_count, test_mine_count, "The method did not correctly count adjacent mines")
+<<<<<<< HEAD
 
     def test_read_col_row_data_single_minefield(self):
         """
@@ -122,6 +127,28 @@ class MinesweeperTests(unittest.TestCase):
         self.assertEqual(expected_row, row_count, "Testing for input of rows")
         self.assertEqual(expected_col, col_count, "Testing for input of col")
         self.assertEqual(expected_data, data, "Testing for input of data")
+=======
+ 
+    def test_read_col_row_data_single_minefield(self):
+            """
+            Testing the input read for Minefield row, col, and data
+            """
+            with open('minefield.txt', 'r') as file:
+                first_line = file.readline().rstrip()
+                expected_row, expected_col = first_line.split()
+                expected_row = int(expected_row)
+                expected_col = int(expected_col)
+                expected_data = [file.readline().rstrip() for _ in range(expected_row)]
+
+            ms = Minesweeper('minefield.txt', 'minesweeper_output.txt')
+
+            with open('minefield.txt', 'r') as file:
+                row_count, data = ms.read_field(file)
+            col_count = len(data)
+            self.assertEqual(expected_row, row_count, "Testing for input of rows")
+            self.assertEqual(expected_col, col_count, "Testing for input of col")
+            self.assertEqual(expected_data, data, "Testing for input of data")
+>>>>>>> 4c225dd78a4bd467814f76047c315bca9172f03b
 
     def test_write_to_output(self):
         """
@@ -184,6 +211,7 @@ class MinesweeperTests(unittest.TestCase):
         # Assert that overall formatting is correct
         self.assertEqual(formatted_minefield, expected_minefield)
 
+<<<<<<< HEAD
     def test20_20_40(self):
         """ test 20 row and 20 column with 40 percent mines """
         input_file = "20_20_40_input.txt"
@@ -336,6 +364,8 @@ class MinesweeperTests(unittest.TestCase):
         # compare the expected with the output generated using run_minesweeper_solution method from Minesweeper class
         expected = """Field #1:\n0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\n"""
         self.assertEqual(content, expected)
+=======
+>>>>>>> 4c225dd78a4bd467814f76047c315bca9172f03b
 
 
 if __name__ == '__main__':

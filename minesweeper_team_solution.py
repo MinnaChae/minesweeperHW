@@ -18,7 +18,6 @@ class Minesweeper:
         """
         self.input_file = input_file
         self.output_file = output_file
-        self.run_minesweeper_solution()  # Automatically call run_minesweeper_solution() upon instantiation
 
     def run_minesweeper_solution(self):
         """
@@ -56,6 +55,9 @@ class Minesweeper:
         first_line = file.readline().rstrip()
         # Split into an array of strings (two string numbers)
         rows_cols_nums = first_line.split()
+        if not rows_cols_nums:
+            # If there are no elements, return 0 for num_of_rows and an empty field
+            return 0, []
         # Extract the first string number (representing the rows) and turn it into an integer
         num_of_rows = int(rows_cols_nums[0])
 
@@ -134,5 +136,7 @@ class Minesweeper:
                     output_file.write("\n")
                 field_count += 1
 
-# Usage, make sure your input/output files are in the same directory!
+
+# Usage
 minesweeper_instance = Minesweeper('mines.txt', 'minesweeper_output.txt')
+minesweeper_instance.run_minesweeper_solution()
